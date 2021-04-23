@@ -12,7 +12,11 @@ let countries = [];
 // Fetch data from API
 fetch(URL)
   .then((response) => response.json())
-  .then((data) => (countries = data))
+  .then((data) => {
+    countries = data;
+    // Initialize Code after complete receiving all data
+    init();
+  })
   .catch((err) => console.log(err));
 
 // Number With Commas Function
@@ -101,8 +105,9 @@ function findClickedCountry(wordToMatch) {
   });
 }
 
-function displayClickedCountry(c) {
-  const clickedCountry = findClickedCountry(c);
+// Display Clicked Country
+function displayClickedCountry(wordToMatch) {
+  const clickedCountry = findClickedCountry(wordToMatch);
   const displayClickedCountry = clickedCountry
     .map((country) => {
       return clickedCountryCardHTML(country);
@@ -173,11 +178,12 @@ function clickedCountryCardHTML(country) {
       </div>`;
 }
 
-// Call Display Countries and Display Clicked Country Function OnLoad
-window.onload = function () {
+// Initialize Display Countries and Display Clicked Country Function OnLoad
+function init() {
   displayCountries(countries);
   displayClickedCountry('BGD');
-};
+}
 
 // Call Display Countries Function On Keyup of input
 searchCountry.addEventListener('keyup', displayCountries);
+searchCountry.addEventListener('change', displayCountries);
