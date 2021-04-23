@@ -16,6 +16,9 @@
     <title>All Countries Information</title>
     <!-- Style -->
     <style>
+      body {
+        overflow-x: hidden !important;
+      }
       .selected-country {
         position: sticky;
         top: 15px;
@@ -26,18 +29,18 @@
   </head>
   <body>
     <section>
-      <!-- Top Text -->
-      <a
-        class="text-center bg-dark text-white py-3 h3 d-block text-decoration-none"
-        href="index.html"
-      >
-        All Countries Information
-      </a>
-      <div class="container-fluid">
+      <div class="sticky-top w-100 p-0 border-bottom bg-white">
+        <!-- Top Text -->
+        <a
+          class="text-center bg-danger text-white py-3 h3 d-block text-decoration-none mb-0"
+          href="index.html"
+        >
+          All Countries Information
+        </a>
         <!-- Search Form -->
         <form
           id="search-country-from"
-          class="form-group my-5 row justify-content-center"
+          class="form-group row justify-content-center px-4 py-4"
         >
           <div class="col-md-10 col-lg-8 col-xl-6 col-xxl-4">
             <input
@@ -48,6 +51,8 @@
             />
           </div>
         </form>
+      </div>
+      <div class="container-fluid mt-5">
         <div class="row">
           <!-- Selected Country -->
           <div class="col-md-6 col-lg-4 col-xxl-3">
