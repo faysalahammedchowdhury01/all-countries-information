@@ -1,7 +1,8 @@
 // Selectors
 const countriesMainDiv = document.querySelector('.countries');
 const selectedCountryDiv = document.querySelector('.selected-country');
-const searchCountry = document.querySelector('#search-country-input');
+const searchCountryForm = document.querySelector('#search-country-form');
+const searchCountryInput = document.querySelector('#search-country-input');
 
 // API URL
 const URL = `https://restcountries.eu/rest/v2/all`;
@@ -45,7 +46,7 @@ function displayCountries(countries = false) {
   }
   // if user provide input
   else {
-    const matchedCountry = findMatchesCountry(searchCountry.value.trim());
+    const matchedCountry = findMatchesCountry(searchCountryInput.value.trim());
     const displayedMatchedCountry = matchedCountry
       .map((country) => {
         return countryCardHTML(country);
@@ -58,7 +59,7 @@ function displayCountries(countries = false) {
 // HTML of Country Card
 function countryCardHTML(country) {
   return `
-      <div class="col-lg-6 col-xxl-4 country mb-4">
+      <div class="col-lg-6 col-xl-4 country mb-4">
         <div class="card">
           <img
             src="https://restcountries.eu/data/${country.alpha3Code.toLowerCase()}.svg"
@@ -98,7 +99,7 @@ function countryCardHTML(country) {
       </div>`;
 }
 
-// Find Matched Country
+// Find Clicked Country
 function findClickedCountry(wordToMatch) {
   return countries.filter((country) => {
     return country.alpha3Code == wordToMatch;
@@ -120,6 +121,7 @@ function displayClickedCountry(wordToMatch) {
 function clickedCountryCardHTML(country) {
   return `
       <div class="col-12">
+      <h4 class="d-md-none py-3">Country Details:</h4>
         <div class="card">
           <img
             src="https://restcountries.eu/data/${country.alpha3Code.toLowerCase()}.svg"
@@ -185,5 +187,10 @@ function init() {
 }
 
 // Call Display Countries Function On Keyup of input
-searchCountry.addEventListener('keyup', displayCountries);
-searchCountry.addEventListener('change', displayCountries);
+searchCountryInput.addEventListener('keyup', displayCountries);
+searchCountryInput.addEventListener('change', displayCountries);
+
+// Prevent Default Behaviour of browser
+searchCountryForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+});
