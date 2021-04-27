@@ -58,7 +58,7 @@ function displayCountries(countries = false) {
 
 // HTML of Country Card
 function countryCardHTML(country) {
-  return `
+  return /*html*/ `
       <div class="col-lg-6 col-xl-4 country mb-4">
         <div class="card">
           <img
@@ -119,7 +119,7 @@ function displayClickedCountry(wordToMatch) {
 
 // HTML of Clicked Country Card
 function clickedCountryCardHTML(country) {
-  return `
+  return /*html*/ `
       <div class="col-12">
       <h4 class="d-md-none py-3">Country Details:</h4>
         <div class="card">
