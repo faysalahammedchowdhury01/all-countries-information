@@ -1,62 +1,56 @@
-// Selectors
+/* Selectors */ //
 const countriesMainDiv = document.querySelector('.countries');
-const selectedCountryDiv = document.querySelector('.selected-country');
+const clickedCountryDiv = document.querySelector('.selected-country');
 const searchCountryForm = document.querySelector('#search-country-form');
 const searchCountryInput = document.querySelector('#search-country-input');
 
-// API URL
-const URL = `https://restcountries.eu/rest/v2/all`;
-
-// Store All Country
+/* Store All Country Here */
 let countries = [];
 
-// Fetch data from API
-fetch(URL)
-  .then((response) => response.json())
-  .then((data) => {
-    countries = data;
-    // Initialize Code after complete receiving all data
-    init();
-  })
-  .catch((err) => console.log(err));
+/* API */
+const BASE_URL = `https://restcountries.eu/rest/v2`;
 
-// Number With Commas Function
+/* Get User Value */
+searchCountryInput.addEventListener('keyup', getUserValue);
+function getUserValue() {
+  const value = this.value.trim();
+  fetchData(value);
+}
+
+/* Fetch data from API */
+function fetchData(value = false) {
+  const URL = value ? `${BASE_URL}/name/${value}` : `${BASE_URL}/all`;
+
+  fetch(URL)
+    .then((response) => response.json())
+    .then((data) => {
+      countries = data;
+
+      /* Init all code after fetch data */
+      init();
+    })
+    .catch((err) => console.error(err));
+}
+
+/*  Display Country */
+function displayCountries(countries) {
+  if (!countries.length) {
+    countriesMainDiv.innerHTML = '';
+  } else {
+    countriesMainDiv.innerHTML = countries
+      .map((country) => {
+        return countryCardHTML(country);
+      })
+      .join('');
+  }
+}
+
+/* Number With Commas Function */
 function numberWithCommas(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 
-// Find Matched Country
-function findMatchesCountry(wordToMatch) {
-  return countries.filter((country) => {
-    const regex = new RegExp(wordToMatch, 'gi');
-    return country.name.match(regex) || country.capital.match(regex);
-  });
-}
-
-// Display Country
-function displayCountries(countries = false) {
-  // if input in blank
-  if (!countries) {
-    const displayedAllCountry = countries
-      .map((country) => {
-        return countryCardHTML(country);
-      })
-      .join('');
-    countriesMainDiv.innerHTML = displayedAllCountry;
-  }
-  // if user provide input
-  else {
-    const matchedCountry = findMatchesCountry(searchCountryInput.value.trim());
-    const displayedMatchedCountry = matchedCountry
-      .map((country) => {
-        return countryCardHTML(country);
-      })
-      .join('');
-    countriesMainDiv.innerHTML = displayedMatchedCountry;
-  }
-}
-
-// HTML of Country Card
+/* HTML of Country Card */
 function countryCardHTML(country) {
   return /*html*/ `
       <div class="col-lg-6 col-xl-4 country mb-4">
@@ -99,25 +93,17 @@ function countryCardHTML(country) {
       </div>`;
 }
 
-// Find Clicked Country
-function findClickedCountry(wordToMatch) {
-  return countries.filter((country) => {
-    return country.alpha3Code == wordToMatch;
-  });
+/* Display Clicked Country */
+function displayClickedCountry(alpha3Code) {
+  const clickedCountry = countries.filter(
+    (country) => country.alpha3Code === alpha3Code
+  );
+  clickedCountryDiv.innerHTML = clickedCountry.map((country) =>
+    clickedCountryCardHTML(country)
+  );
 }
 
-// Display Clicked Country
-function displayClickedCountry(wordToMatch) {
-  const clickedCountry = findClickedCountry(wordToMatch);
-  const displayClickedCountry = clickedCountry
-    .map((country) => {
-      return clickedCountryCardHTML(country);
-    })
-    .join('');
-  selectedCountryDiv.innerHTML = displayClickedCountry;
-}
-
-// HTML of Clicked Country Card
+/* HTML of Clicked Country Card */
 function clickedCountryCardHTML(country) {
   return /*html*/ `
       <div class="col-12">
@@ -180,17 +166,9 @@ function clickedCountryCardHTML(country) {
       </div>`;
 }
 
-// Initialize Display Countries and Display Clicked Country Function OnLoad
+/* Init */
 function init() {
   displayCountries(countries);
   displayClickedCountry('BGD');
 }
-
-// Call Display Countries Function On Keyup of input
-searchCountryInput.addEventListener('keyup', displayCountries);
-searchCountryInput.addEventListener('change', displayCountries);
-
-// Prevent Default Behaviour of browser
-searchCountryForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-});
+fetchData();
